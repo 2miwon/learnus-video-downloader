@@ -6,19 +6,22 @@ EXECUTABLE = target/release/$(TARGET_NAME)
 ARGS = $(filter-out $@,$(MAKECMDGOALS))
 .DEFAULT_GOAL := help
 
+ID := $(word 1, $(ARGS))
+FNAME := $(word 2, $(ARGS))
+
 build:
 	@cargo build --release
 
 run:
-	@$(EXECUTABLE) $(ARGS)
+	@$(EXECUTABLE) $(ID) $(FNAME)
 
 autorun: build run
 
 mp4: run
-	ffmpeg -i ./output/$(ARGS).ts -c copy ./output/$(ARGS).mp4
+	ffmpeg -i ./output/$(FNAME).ts -c copy ./output/$(FNAME).mp4 && rm ./output/$(FNAME).ts
 
 mp3: run
-	ffmpeg -i ./output/$(ARGS).ts -q:a 0 -map a ./output/$(ARGS).mp3
+	ffmpeg -i ./output/$(FNAME).ts -q:a 0 -map a ./output/$(FNAME).mp3 && rm ./output/$(FNAME).ts
 
 clean:
 	@cargo clean

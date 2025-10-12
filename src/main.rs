@@ -27,9 +27,9 @@ async fn find_valid_a_number(client: &Client, lecture_id: &str) -> Option<u32> {
     None
 }
 
-async fn download_stream(client: &Client, lecture_id: &str) -> Result<(), Box<dyn Error>> {
+async fn download_stream(client: &Client, lecture_id: &str, fname: &str) -> Result<(), Box<dyn Error>> {
     tokio::fs::create_dir_all("./output").await?;
-    let file_path = format!("./output/{}.ts", lecture_id);
+    let file_path = format!("./output/{}.ts", fname);
     println!("\nOpening output file... {}", file_path);
     let mut output_file = OpenOptions::new()
         .create(true)
@@ -88,16 +88,17 @@ async fn download_stream(client: &Client, lecture_id: &str) -> Result<(), Box<dy
 async fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() != 3 {
-        println!("test\n{:?}", args);
+    if args.len() != 4 {
+        println!("args= {:?}", args);
         eprintln!("This program is best used via Makefile.");
-        eprintln!("Usage: make video <lecture_id>");
-        eprintln!("   or: make audio <lecture_id>");
+        eprintln!("Usage: make video <lecture_id> <fname>");
+        eprintln!("   or: make audio <lecture_id> <fname>");
         return Ok(());
     }
 
     let _ = &args[1]; // mode
     let lecture_id = &args[2];
+    let fname = &args[3];
 
     let client = Client::new();
 
@@ -111,9 +112,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
     //     }
     // };
 
-    match download_stream(&client, lecture_id).await {
+    match download_stream(&client, lecture_id, fname).await {
         Ok(_) => {
-            println!("\nDownload complete! Video saved as {}", lecture_id);
+            println!("\nDownload complete! Video saved as {}", fname);
             Ok(())
         }
         Err(e) => {
