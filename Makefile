@@ -3,7 +3,7 @@
 TARGET_NAME = learnus-video-downloader
 EXECUTABLE = target/release/$(TARGET_NAME)
 
-ARGS = $(filter-out $@,$(MAKECMDGOALS))
+ARGS := $(wordlist 2, $(words $(MAKECMDGOALS)), $(MAKECMDGOALS))
 .DEFAULT_GOAL := help
 
 ID := $(word 1, $(ARGS))

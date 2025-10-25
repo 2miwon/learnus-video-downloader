@@ -88,17 +88,17 @@ async fn download_stream(client: &Client, lecture_id: &str, fname: &str) -> Resu
 async fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() != 4 {
+    if args.len() != 3 {
         println!("args= {:?}", args);
         eprintln!("This program is best used via Makefile.");
-        eprintln!("Usage: make video <lecture_id> <fname>");
-        eprintln!("   or: make audio <lecture_id> <fname>");
+        eprintln!("Usage: make mp4 <lecture_id> <fname>");
+        eprintln!("   or: make mp3 <lecture_id> <fname>");
         return Ok(());
     }
 
-    let _ = &args[1]; // mode
-    let lecture_id = &args[2];
-    let fname = &args[3];
+    // let _ = &args[1]; // mode
+    let lecture_id = &args[1];
+    let fname = &args[2];
 
     let client = Client::new();
 

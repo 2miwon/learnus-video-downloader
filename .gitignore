@@ -21,3 +21,5 @@ Cargo.lock
 
 output
 output/*
+temp
+.DS_Store
